@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "cffi>=1.15"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wiresharkffi"
+version = "0.1.0"
+description = "libwireshark-backed pcap/pcapng reader via CFFI - full dissector stack, no subprocess"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["cffi>=1.15"]
+keywords = ["wireshark", "pcap", "pcapng", "network", "packet", "dissector", "libwireshark"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Networking :: Monitoring",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/calligraf0/wiresharkffi"
+"Bug Tracker" = "https://github.com/calligraf0/wiresharkffi/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+wiresharkffi = ["_ws_impl.c", "py.typed"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths  = ["tests"]

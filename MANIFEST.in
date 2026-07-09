@@ -1,0 +1,13 @@
+# The C helper layer is read by _ws_build.py at build time; without it the sdist
+# cannot compile. It is not a .py module, so setuptools does not pick it up
+# automatically - list it (and the type marker) explicitly.
+include src/wiresharkffi/_ws_impl.c
+include src/wiresharkffi/py.typed
+
+include LICENSE
+include README.md
+recursive-include docs *.md
+
+# Test suite and fixtures, so `pip install --no-binary` / sdist consumers can run tests.
+recursive-include tests *.py
+recursive-include tests/data *
