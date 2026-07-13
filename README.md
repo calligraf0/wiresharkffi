@@ -10,7 +10,7 @@ If you've ever processed pcap files in Python you know the options aren't great:
 
 ```bash
 # Ubuntu / Debian
-sudo apt install `libwireshark`-dev libglib2.0-dev pkg-config
+sudo apt install libwireshark-dev libglib2.0-dev pkg-config
 
 # Arch Linux
 sudo pacman -S wireshark-qt pkgconf
