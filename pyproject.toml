@@ -5,6 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "wiresharkffi"
 version = "0.1.0"
+authors = [
+    {name = "calligraf0"},
+]
+license = "AGPL-3.0-or-later"
 description = "libwireshark-backed pcap/pcapng reader via CFFI - full dissector stack, no subprocess"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -30,7 +34,8 @@ dev = ["pytest>=8"]
 
 [project.urls]
 Homepage = "https://github.com/calligraf0/wiresharkffi"
-"Bug Tracker" = "https://github.com/calligraf0/wiresharkffi/issues"
+Issues = "https://github.com/calligraf0/wiresharkffi/issues"
+Repository = "https://github.com/calligraf0/wiresharkffi.git"
 
 [tool.setuptools.packages.find]
 where = ["src"]
