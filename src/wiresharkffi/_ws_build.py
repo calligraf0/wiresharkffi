@@ -51,16 +51,16 @@ struct packet_provider_data;
 struct packet_provider_funcs;
 
 /* GLib / C primitives */
-typedef unsigned int   guint;
-typedef int            gint;
-typedef int            gboolean;
-typedef unsigned char  guint8;
-typedef unsigned short guint16;
-typedef unsigned int   guint32;
-typedef long           gint64;
-typedef unsigned long  guint64;
-typedef void          *gpointer;
-typedef char           gchar;
+typedef unsigned int    guint;
+typedef int             gint;
+typedef int             gboolean;
+typedef unsigned char   guint8;
+typedef unsigned short  guint16;
+typedef unsigned int    guint32;
+typedef int64_t         gint64;
+typedef uint64_t        guint64;
+typedef void            *gpointer;
+typedef char            gchar;
 
 /* Buffer (wsutil/buffer.h) - layout unchanged across WS versions */
 typedef struct {
