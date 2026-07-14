@@ -10,6 +10,8 @@ import warnings
 from concurrent.futures import ThreadPoolExecutor
 from typing import AsyncIterator, Iterator
 
+import wiresharkffi._guard as _guard
+
 try:
     from wiresharkffi._ws import ffi, lib as ws
 except ImportError as exc:
@@ -86,6 +88,8 @@ class PcapReader:
         self._cum_bytes   = 0
         self._iterating   = False   # guards against concurrent async iteration
 
+
+        _guard.acquire(self)
         try:
             self._init(path, argv0, load_plugins)
         except Exception:
@@ -357,31 +361,37 @@ class PcapReader:
 
     def close(self) -> None:
         """Release all libwireshark resources. Safe to call more than once."""
-        if self._closed:
-            return
-        self._closed = True
-        # Free in reverse-acquisition order: each resource depends on the ones below it.
-        if self._dfilter != ffi.NULL:
-            ws._ws_dfilter_free(self._dfilter)
-            self._dfilter = ffi.NULL
-        if self._edt != ffi.NULL:
-            ws.epan_dissect_free(self._edt)
-            self._edt = ffi.NULL
-        if self._buf != ffi.NULL:
-            ws.ws_buffer_free(self._buf)
-            self._buf = ffi.NULL
-        if self._rec != ffi.NULL:
-            ws._ws_free_rec(self._rec)
-            self._rec = ffi.NULL
-        if self._fdata != ffi.NULL:
-            ws._ws_free_fdata(self._fdata)
-            self._fdata = ffi.NULL
-        if self._wth != ffi.NULL:
-            ws.wtap_close(self._wth)
-            self._wth = ffi.NULL
-        if self._session != ffi.NULL:
-            ws.epan_free(self._session)
-            self._session = ffi.NULL
-        if self._prov_funcs != ffi.NULL:
-            ws._ws_free_prov_funcs(self._prov_funcs)
-            self._prov_funcs = ffi.NULL
+        try:
+            if self._closed:
+                return
+            self._closed = True
+            # Free in reverse-acquisition order: each resource depends on the ones below it.
+            if self._dfilter != ffi.NULL:
+                ws._ws_dfilter_free(self._dfilter)
+                self._dfilter = ffi.NULL
+            if self._edt != ffi.NULL:
+                ws.epan_dissect_free(self._edt)
+                self._edt = ffi.NULL
+            if self._buf != ffi.NULL:
+                ws.ws_buffer_free(self._buf)
+                self._buf = ffi.NULL
+            if self._rec != ffi.NULL:
+                ws._ws_free_rec(self._rec)
+                self._rec = ffi.NULL
+            if self._fdata != ffi.NULL:
+                ws._ws_free_fdata(self._fdata)
+                self._fdata = ffi.NULL
+            if self._wth != ffi.NULL:
+                ws.wtap_close(self._wth)
+                self._wth = ffi.NULL
+            if self._session != ffi.NULL:
+                ws.epan_free(self._session)
+                self._session = ffi.NULL
+            if self._prov_funcs != ffi.NULL:
+                ws._ws_free_prov_funcs(self._prov_funcs)
+                self._prov_funcs = ffi.NULL
+        finally:
+            _guard.release(self)
+
+    def __del__(self):
+        self.close()
